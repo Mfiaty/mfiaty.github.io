@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID://MAELYS_FIATY — Portfolio</title>
+<style>
+:root {
+  --bg:#1e2030; --rose:#ff6ba8; --rose2:#ff3d8a;
+  --text:#e8e8f0; --text-dim:#9090b0;
+  --border:rgba(255,107,168,0.15); --card:rgba(255,107,168,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;}
+
+.cursor{position:fixed;width:12px;height:12px;background:var(--rose);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s,border .2s;}
+.cursor-glow{position:fixed;width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,168,0.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);}
+@media(max-width:768px){.cursor,.cursor-glow{display:none;}}
+
+#boot{position:fixed;inset:0;background:#0a0810;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:monospace;padding:20px;}
+.boot-logo{font-size:clamp(18px,5vw,40px);font-weight:900;color:var(--rose);letter-spacing:4px;margin-bottom:8px;text-shadow:0 0 30px var(--rose);text-align:center;}
+.boot-sub{font-size:clamp(9px,2vw,11px);color:rgba(255,107,168,0.5);letter-spacing:3px;margin-bottom:40px;text-align:center;}
+.boot-lines{width:min(500px,90vw);margin-bottom:24px;}
+.boot-line{font-size:clamp(10px,2vw,12px);color:#666;padding:3px 0;opacity:0;transition:opacity .3s;}
+.boot-line.visible{opacity:1;}
+.boot-line .ok{color:var(--rose);}
+.boot-bar-wrap{width:min(500px,90vw);}
+.boot-bar-label{font-size:clamp(9px,2vw,10px);color:rgba(255,107,168,0.5);margin-bottom:6px;}
+.boot-bar{height:3px;background:#222;border-radius:2px;overflow:hidden;}
+.boot-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose2),var(--rose));width:0%;border-radius:2px;}
+
+.dots-bg{position:fixed;inset:0;background-image:radial-gradient(circle,rgba(255,107,168,0.1) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0;}
+
+nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(30,32,48,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 clamp(12px,4vw,48px);justify-content:space-between;z-index:100;gap:12px;}
+.nav-id{font-family:monospace;font-size:clamp(9px,1.4vw,13px);font-weight:bold;color:var(--rose);letter-spacing:1px;text-shadow:0 0 12px rgba(255,107,168,0.4);white-space:nowrap;}
+.nav-links{display:flex;gap:clamp(8px,2vw,28px);}
+.nav-links a{font-family:monospace;font-size:clamp(8px,1.1vw,11px);color:var(--text-dim);text-decoration:none;letter-spacing:1px;transition:color .3s;white-space:nowrap;}
+.nav-links a:hover{color:var(--rose);}
+.nav-status{font-family:monospace;font-size:clamp(8px,1vw,11px);color:var(--rose);border:1px solid rgba(255,107,168,0.3);padding:3px 8px;border-radius:20px;background:rgba(255,107,168,0.08);display:flex;align-items:center;gap:5px;white-space:nowrap;}
+@media(max-width:600px){.nav-links{display:none;}}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--rose);animation:pulse-dot 2s infinite;flex-shrink:0;}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.3}}
+
+section{min-height:100vh;padding:clamp(80px,10vw,120px) clamp(16px,6vw,80px) clamp(40px,6vw,80px);position:relative;z-index:1;text-align:center;}
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+.section-num{font-family:monospace;font-size:clamp(10px,1.5vw,12px);color:var(--rose);letter-spacing:3px;margin-bottom:8px;}
+.section-title{font-size:clamp(28px,5vw,56px);font-weight:900;margin-bottom:44px;line-height:1.05;}
+.section-title .outline{-webkit-text-stroke:2px var(--rose);color:transparent;}
+
+#profil{display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:100px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:monospace;font-size:clamp(9px,1.5vw,12px);color:var(--rose);letter-spacing:2px;border:1px solid rgba(255,107,168,0.3);padding:5px 14px;border-radius:20px;background:rgba(255,107,168,0.08);margin-bottom:24px;}
+.hero-name{font-size:clamp(42px,9vw,90px);font-weight:900;font-family:monospace;line-height:1;margin-bottom:12px;}
+.hero-name .rose{color:var(--rose);text-shadow:0 0 40px rgba(255,107,168,0.4);}
+.hero-role{font-family:monospace;font-size:clamp(10px,1.5vw,14px);color:var(--text-dim);letter-spacing:3px;margin-bottom:28px;}
+.hero-desc{font-size:clamp(14px,1.6vw,17px);color:var(--text-dim);line-height:1.9;max-width:680px;margin:0 auto 40px;}
+.hero-stats{display:flex;gap:clamp(20px,4vw,48px);margin-bottom:44px;justify-content:center;flex-wrap:wrap;}
+.stat-val{font-size:clamp(22px,4vw,36px);font-weight:900;font-family:monospace;color:var(--rose);text-shadow:0 0 20px rgba(255,107,168,0.3);}
+.stat-lbl{font-size:clamp(9px,1.2vw,11px);font-family:monospace;color:var(--text-dim);letter-spacing:1px;margin-top:2px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{padding:13px 30px;background:var(--rose);color:white;font-weight:bold;font-size:clamp(11px,1.3vw,13px);letter-spacing:2px;font-family:monospace;border:none;border-radius:4px;cursor:none;text-decoration:none;display:inline-block;transition:background .3s,transform .2s,box-shadow .3s;box-shadow:0 0 20px rgba(255,107,168,0.2);}
+.btn-primary:hover{background:var(--rose2);transform:translateY(-2px);box-shadow:0 0 30px rgba(255,107,168,0.4);}
+.btn-secondary{padding:13px 30px;background:transparent;color:var(--rose);font-weight:bold;font-size:clamp(11px,1.3vw,13px);letter-spacing:2px;font-family:monospace;border:1px solid rgba(255,107,168,0.4);border-radius:4px;cursor:none;text-decoration:none;display:inline-block;transition:all .3s;}
+.btn-secondary:hover{border-color:var(--rose);background:rgba(255,107,168,0.08);transform:translateY(-2px);}
+
+.terminal{background:#0d0f1a;border:1px solid rgba(255,107,168,0.2);border-radius:8px;padding:20px 24px;font-family:monospace;font-size:clamp(11px,1.4vw,14px);max-width:620px;margin:40px auto 0;text-align:left;}
+.terminal-bar{display:flex;gap:6px;margin-bottom:14px;}
+.t-dot{width:10px;height:10px;border-radius:50%;}
+.terminal-line{color:#666;padding:3px 0;}
+.terminal-line .prompt{color:var(--rose);}
+.terminal-line .val{color:var(--text);}
+.terminal-line .green{color:#00e5aa;}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;text-align:left;}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;transition:border-color .3s,background .3s,transform .3s;}
+.skill-card:hover{border-color:rgba(255,107,168,0.4);background:rgba(255,107,168,0.08);transform:translateY(-4px);}
+.skill-cat{font-family:monospace;font-size:clamp(9px,1.1vw,10px);color:var(--rose);letter-spacing:2px;margin-bottom:8px;}
+.skill-cat-line{width:30px;height:2px;background:var(--rose);margin-bottom:14px;}
+.skill-title{font-size:clamp(14px,1.6vw,17px);font-weight:700;margin-bottom:14px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{font-size:clamp(10px,1.1vw,12px);font-family:monospace;color:var(--rose);border:1px solid rgba(255,107,168,0.3);padding:4px 10px;border-radius:20px;background:rgba(255,107,168,0.06);transition:background .2s,border-color .2s;}
+.tag:hover{background:rgba(255,107,168,0.15);border-color:var(--rose);}
+
+.lang-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px;text-align:left;}
+.lang-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;transition:border-color .3s,transform .3s;}
+.lang-card:hover{border-color:rgba(255,107,168,0.4);transform:translateY(-3px);}
+.lang-flag{font-size:30px;margin-bottom:10px;}
+.lang-name{font-size:clamp(15px,1.6vw,17px);font-weight:700;margin-bottom:5px;}
+.lang-level{font-size:clamp(11px,1.2vw,13px);color:var(--rose);font-family:monospace;margin-bottom:7px;}
+.lang-detail{font-size:clamp(12px,1.2vw,13px);color:var(--text-dim);line-height:1.6;}
+
+.expand-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .3s,box-shadow .3s;margin-bottom:14px;text-align:left;}
+.expand-card:hover{border-color:rgba(255,107,168,0.3);}
+.expand-card.open{border-color:rgba(255,107,168,0.5);box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.expand-header{padding:22px 26px;display:flex;align-items:center;justify-content:space-between;cursor:none;position:relative;overflow:hidden;}
+.expand-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--rose2),var(--rose));opacity:0;transition:opacity .3s;}
+.expand-card.open .expand-header::before{opacity:1;}
+.expand-header-left{flex:1;}
+.expand-type{font-family:monospace;font-size:clamp(9px,1.1vw,10px);color:var(--rose);letter-spacing:2px;display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.expand-dot{width:6px;height:6px;border-radius:50%;background:var(--rose);flex-shrink:0;}
+.expand-title{font-size:clamp(15px,1.9vw,19px);font-weight:700;margin-bottom:4px;}
+.expand-subtitle{font-size:clamp(12px,1.2vw,13px);color:var(--text-dim);font-family:monospace;}
+.expand-arrow{width:34px;height:34px;border:1px solid rgba(255,107,168,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--rose);font-size:16px;transition:transform .4s,background .3s,border-color .3s;flex-shrink:0;margin-left:16px;}
+.expand-card.open .expand-arrow{transform:rotate(180deg);background:rgba(255,107,168,0.12);border-color:var(--rose);}
+.expand-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(0.4,0,0.2,1);}
+.expand-body-inner{padding:0 26px 26px;border-top:1px solid rgba(255,107,168,0.1);}
+.expand-card.open .expand-body{max-height:1400px;}
+.expand-desc{font-size:clamp(13px,1.4vw,15px);color:var(--text-dim);line-height:1.9;margin-bottom:16px;padding-top:20px;}
+.expand-security{background:rgba(255,107,168,0.06);border:1px solid rgba(255,107,168,0.15);border-radius:6px;padding:13px 16px;margin-bottom:16px;font-size:clamp(12px,1.2vw,14px);color:var(--text-dim);line-height:1.8;}
+.expand-security span{color:var(--rose);font-weight:bold;}
+.expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:500px){.expand-grid{grid-template-columns:1fr;}}
+.expand-grid-label{font-family:monospace;font-size:clamp(9px,1.1vw,10px);color:var(--rose);letter-spacing:1px;margin-bottom:6px;}
+.expand-grid-value{font-size:clamp(12px,1.2vw,14px);color:var(--text-dim);line-height:1.7;}
+
+.hobbies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;text-align:center;}
+.hobby-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;transition:border-color .3s,transform .3s;}
+.hobby-card:hover{border-color:rgba(255,107,168,0.4);transform:translateY(-4px);}
+.hobby-icon{font-size:30px;margin-bottom:10px;}
+.hobby-name{font-size:clamp(13px,1.4vw,15px);font-weight:700;margin-bottom:6px;}
+.hobby-desc{font-size:clamp(11px,1.2vw,13px);color:var(--text-dim);line-height:1.6;}
+
+.certif-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;text-align:left;}
+.certif-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;display:flex;gap:12px;align-items:flex-start;transition:border-color .3s,transform .3s;}
+.certif-card:hover{border-color:rgba(255,107,168,0.4);transform:translateY(-3px);}
+.certif-icon{font-size:22px;flex-shrink:0;}
+.certif-name{font-size:clamp(13px,1.4vw,15px);font-weight:700;margin-bottom:4px;}
+.certif-issuer{font-size:clamp(11px,1.2vw,12px);color:var(--text-dim);font-family:monospace;}
+
+.contact-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:960px;margin:0 auto;text-align:left;}
+@media(max-width:700px){.contact-wrapper{grid-template-columns:1fr;}}
+.contact-links-grid{display:flex;flex-direction:column;gap:10px;}
+.contact-link{display:flex;align-items:center;gap:14px;font-family:monospace;text-decoration:none;padding:14px 18px;border:1px solid var(--border);border-radius:8px;background:var(--card);transition:border-color .3s,color .3s,transform .2s;}
+.contact-link:hover{border-color:var(--rose);transform:translateX(4px);}
+.contact-link-label{font-size:clamp(9px,1.1vw,10px);font-family:monospace;color:var(--rose);letter-spacing:2px;display:block;margin-bottom:2px;}
+.contact-link-val{font-size:clamp(13px,1.4vw,15px);color:var(--text);}
+.contact-link-icon{font-size:20px;flex-shrink:0;}
+
+.divider{height:1px;background:var(--border);margin:0 clamp(16px,6vw,80px);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(255,107,168,0.3);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--rose);}
+@keyframes blink-cursor{0%,49%{opacity:1}50%,100%{opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="dots-bg"></div>
+
+<div id="boot">
+  <div class="boot-logo">MAELYS_FIATY</div>
+  <div class="boot-sub">// INITIALIZING PORTFOLIO</div>
+  <div class="boot-lines" id="bootLines"></div>
+  <div class="boot-bar-wrap">
+    <div class="boot-bar-label" id="bootLabel">Loading: 0%</div>
+    <div class="boot-bar"><div class="boot-bar-fill" id="bootFill"></div></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-id">ID://MAELYS_FIATY</div>
+  <div class="nav-links">
+    <a href="#profil">PROFIL</a>
+    <a href="#skills">SKILLS</a>
+    <a href="#projets">PROJETS</a>
+    <a href="#certif">CERTIF</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>OPEN TO ALTERNANCE</div>
+</nav>
+
+<!-- ═══ PROFIL ═══ -->
+<section id="profil">
+  <div class="hero-badge fade-in"><div class="status-dot"></div>ÉTUDIANTE EN BACHELOR INFORMATIQUE ET CYBERSÉCURITÉ · ESILV PARIS · 2026</div>
+  <div class="hero-name fade-in">MAELYS<br><span class="rose">FIATY</span></div>
+  <div class="hero-role fade-in">CYBERSECURITY · INFRASTRUCTURE · CLOUD & AI · DÉVELOPPEMENT</div>
+  <div class="hero-desc fade-in">Étudiante en 3e année de Bachelor en Ingénierie Numérique et Cybersécurité à l'ESILV (Paris-La Défense), je construis un parcours ancré dans la pratique depuis le début. Passionnée par la sécurité des infrastructures, le développement et l'ingénierie des données, j'ai déployé des systèmes sécurisés de bout en bout, développé des interfaces en production et contribué à des architectures cloud sur AWS. Curieuse, rigoureuse et autonome, je cherche une alternance pour mettre mes compétences au service d'une équipe technique ambitieuse.</div>
+  <div class="hero-stats fade-in">
+    <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">PROJETS</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">STAGES</div></div>
+    <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">MOIS DISPO</div></div>
+    <div class="stat"><div class="stat-val">560</div><div class="stat-lbl">TOEFL ITP</div></div>
+  </div>
+  <div class="hero-btns fade-in">
+    <a href="#contact" class="btn-primary">→ ME RECRUTER</a>
+    <a href="#projets" class="btn-secondary">VOIR MES PROJETS</a>
+  </div>
+  <div class="terminal fade-in" style="transition-delay:.5s">
+    <div class="terminal-bar">
+      <div class="t-dot" style="background:#ff5f57"></div>
+      <div class="t-dot" style="background:#ffbd2e"></div>
+      <div class="t-dot" style="background:#28c840"></div>
+    </div>
+    <div class="terminal-line"><span class="prompt">root@portfolio:~$</span> ./profile_scan --target maelys_fiaty</div>
+    <div class="terminal-line"><span class="green">›</span> <span class="val">Identity confirmed : MAELYS FIATY</span></div>
+    <div class="terminal-line"><span class="green">›</span> <span class="val">Status : Bachelor Ingénierie Numérique et Cybersécurité — ESILV</span></div>
+    <div class="terminal-line"><span class="green">›</span> <span class="val">Email : maelys.fiaty@edu.devinci.fr</span></div>
+    <div class="terminal-line"><span class="green">›</span> <span class="val">GitHub : github.com/Mfiaty</span></div>
+    <div class="terminal-line"><span class="green">›</span> <span class="val">LinkedIn : linkedin.com/in/maelys-fiaty</span></div>
+    <div class="terminal-line" style="color:var(--rose)"><span class="prompt">›</span> Alternance 12 mois · 2j entreprise / 3j école · Disponible dès le 28 sept. 2026</div>
+    <div class="terminal-line"><span class="prompt">root@portfolio:~$</span> <span style="animation:blink-cursor 1s infinite">█</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SKILLS ═══ -->
+<section id="skills">
+  <div class="section-num fade-in">02 / COMPÉTENCES</div>
+  <div class="section-title fade-in">STACK & <span class="outline">OUTILS</span></div>
+  <div class="skills-grid">
+    <div class="skill-card fade-in">
+      <div class="skill-cat">CYBERSÉCURITÉ</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Sécurité & Défense</div>
+      <div class="tags">
+        <span class="tag">JWT / RBAC</span><span class="tag">DNSSEC</span><span class="tag">SPF/DKIM/DMARC</span>
+        <span class="tag">MQTT over TLS</span><span class="tag">UFW</span><span class="tag">SSH Hardening</span>
+        <span class="tag">ISO 27001</span><span class="tag">RGPD</span><span class="tag">OWASP Top 10</span>
+        <span class="tag">MITRE ATT&CK</span><span class="tag">CORS</span><span class="tag">Pentest (bases)</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in" style="transition-delay:.1s">
+      <div class="skill-cat">CLOUD & DEVOPS</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Infrastructure & Cloud</div>
+      <div class="tags">
+        <span class="tag">AWS Lambda</span><span class="tag">S3</span><span class="tag">DynamoDB</span>
+        <span class="tag">API Gateway</span><span class="tag">Docker</span><span class="tag">Docker Compose</span>
+        <span class="tag">Terraform</span><span class="tag">Serverless Framework</span>
+        <span class="tag">CI/CD</span><span class="tag">VPS Linux</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in" style="transition-delay:.2s">
+      <div class="skill-cat">DATA & IA</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Data Engineering & IA</div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">MCP Servers</span><span class="tag">Agents IA</span>
+        <span class="tag">Node-RED</span><span class="tag">Grafana</span><span class="tag">InfluxDB</span>
+        <span class="tag">Supabase</span><span class="tag">SQL/MySQL</span><span class="tag">Pipelines</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in" style="transition-delay:.3s">
+      <div class="skill-cat">DÉVELOPPEMENT WEB</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Langages & Frameworks</div>
+      <div class="tags">
+        <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">Vue.js</span>
+        <span class="tag">Nuxt</span><span class="tag">React</span><span class="tag">Next.js</span>
+        <span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">HTML/CSS</span>
+        <span class="tag">PHP</span><span class="tag">C</span><span class="tag">Git</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in" style="transition-delay:.4s">
+      <div class="skill-cat">RÉSEAUX & INFRA</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Protocoles & Systèmes</div>
+      <div class="tags">
+        <span class="tag">DNS/BIND9</span><span class="tag">TCP/IP</span><span class="tag">MQTT</span>
+        <span class="tag">HTTP/HTTPS</span><span class="tag">SMTP</span><span class="tag">DMZ</span>
+        <span class="tag">SSH</span><span class="tag">Linux</span><span class="tag">Arduino</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in" style="transition-delay:.5s">
+      <div class="skill-cat">OUTILS & QUALITÉ</div>
+      <div class="skill-cat-line"></div>
+      <div class="skill-title">Tests & Documentation</div>
+      <div class="tags">
+        <span class="tag">Jest</span><span class="tag">Swagger</span><span class="tag">Postman</span>
+        <span class="tag">Git avancé</span><span class="tag">GitHub</span><span class="tag">Architecture MVC</span>
+        <span class="tag">TryHackMe</span><span class="tag">HackTheBox</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:52px">
+    <div class="section-num fade-in" style="font-size:10px;margin-bottom:10px">LANGUES</div>
+    <div class="lang-grid">
+      <div class="lang-card fade-in">
+        <div class="lang-flag">🇫🇷</div>
+        <div class="lang-name">Français</div>
+        <div class="lang-level">LANGUE MATERNELLE</div>
+        <div class="lang-detail">Niveau natif — écrit, oral et professionnel</div>
+      </div>
+      <div class="lang-card fade-in" style="transition-delay:.1s">
+        <div class="lang-flag">🇬🇧</div>
+        <div class="lang-name">Anglais</div>
+        <div class="lang-level">B2+ · TOEFL ITP 560/677</div>
+        <div class="lang-detail">Certification TOEFL ITP obtenue. Lu, écrit et parlé couramment en contexte professionnel et académique. Expérience en environnement académique international à Bruxelles.</div>
+      </div>
+      <div class="lang-card fade-in" style="transition-delay:.2s">
+        <div class="lang-flag">🇪🇸</div>
+        <div class="lang-name">Espagnol</div>
+        <div class="lang-level">NIVEAU SCOLAIRE · LV2</div>
+        <div class="lang-detail">Bases acquises sur l'ensemble du cursus secondaire.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PROJETS ═══ -->
+<section id="projets">
+  <div class="section-num fade-in">03 / PROJETS</div>
+  <div class="section-title fade-in">RÉALISATIONS <span class="outline">TECHNIQUES</span></div>
+
+  <div class="expand-card fade-in" onclick="toggleCard(this)">
+    <div class="expand-header">
+      <div class="expand-header-left">
+        <div class="expand-type"><div class="expand-dot"></div>PROJET ACADÉMIQUE · EPHEC · 2025–2026</div>
+        <div class="expand-title">Infrastructure Sécurisée sur VPS OVH</div>
+        <div class="expand-subtitle">Linux Debian · Docker · BIND9 · Nginx · Mail · Hardening</div>
+      </div>
+      <div class="expand-arrow">↓</div>
+    </div>
+    <div class="expand-body">
+      <div class="expand-body-inner">
+        <div class="expand-desc">Déploiement et administration d'un écosystème réseau complet sur VPS OVH sous Linux Debian. L'objectif était de simuler une infrastructure en production réelle, en couvrant toute la chaîne — du serveur DNS à la messagerie sécurisée, en passant par le reverse proxy, la base de données et l'isolation réseau. Chaque service a été configuré pour fonctionner de façon indépendante et sécurisée.</div>
+        <div class="expand-grid">
+          <div>
+            <div class="expand-grid-label">TECHNOLOGIES UTILISÉES</div>
+            <div class="expand-grid-value">Linux Debian · Docker Compose · BIND9 · Nginx · php-fpm · MariaDB · docker-mailserver · OpenSSL · UFW · fail2ban</div>
+          </div>
+          <div>
+            <div class="expand-grid-label">ARCHITECTURE</div>
+            <div class="expand-grid-value">5 services Docker Compose avec réseaux isolés · Reverse proxy Nginx · Base de données MariaDB · Serveur DNS BIND9 · Serveur mail complet</div>
+          </div>
+        </div>
+        <div class="expand-security"><span>Sécurité :</span> Chaîne de confiance cryptographique DNSSEC (signatures des zones, validation des enregistrements) · Serveur mail protégé par SPF, DKIM et DMARC (protection active anti-phishing et anti-usurpation d'identité) · HTTPS avec certificats · Hardening SSH sur port non-standard avec authentification par clé cryptographique · 10 règles UFW et plus · fail2ban pour la protection contre les attaques par force brute · Isolation complète des services</div>
+        <div class="tags">
+          <span class="tag">DNSSEC</span><span class="tag">Docker Compose</span><span class="tag">HTTPS</span>
+          <span class="tag">UFW</span><span class="tag">fail2ban</span><span class="tag">Nginx</span>
+          <span class="tag">MariaDB</span><span class="tag">Linux Debian</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="expand-card fade-in" style="transition-delay:.1s" onclick="toggleCard(this)">
+    <div class="expand-header">
+      <div class="expand-header-left">
+        <div class="expand-type"><div class="expand-dot"></div>PROJET ACADÉMIQUE · EPHEC · 2025–2026</div>
+        <div class="expand-title">CleanColoc</div>
+        <div class="expand-subtitle">Next.js · Node.js · Express · TypeScript · Sequelize · Supabase</div>
+      </div>
+      <div class="expand-arrow">↓</div>
+    </div>
+    <div class="expand-body">
+      <div class="expand-body-inner">
+        <div class="expand-desc">Application web full-stack de gestion de colocation étudiante développée en équipe. L'application permet à des colocataires de gérer leurs dépenses, tâches et accès, avec un système de rôles différenciés. Le développement a suivi une méthodologie agile avec des user stories, des sprints, et un workflow Git structuré.</div>
+        <div class="expand-grid">
+          <div>
+            <div class="expand-grid-label">TECHNOLOGIES UTILISÉES</div>
+            <div class="expand-grid-value">Next.js · Node.js · Express · TypeScript · Sequelize (ORM) · Supabase (PostgreSQL) · Git collaboratif · Architecture MVC</div>
+          </div>
+          <div>
+            <div class="expand-grid-label">MON RÔLE</div>
+            <div class="expand-grid-value">Lead développeur — conception de l'architecture IAM, développement backend Express, déploiement, revues de code, coordination technique de l'équipe</div>
+          </div>
+        </div>
+        <div class="expand-security"><span>Sécurité :</span> Authentification par sessions sécurisées · Gestion des rôles admin et user avec transfert obligatoire des droits à la sortie de l'admin · Code d'accès à la colocation régénéré automatiquement à chaque départ de membre (prévention de la réintégration non autorisée — contrôle d'accès dynamique) · Validation côté serveur de toutes les données entrantes</div>
+        <div class="tags">
+          <span class="tag">Next.js</span><span class="tag">Node.js</span><span class="tag">Express</span>
+          <span class="tag">TypeScript</span><span class="tag">Sequelize</span><span class="tag">Supabase</span>
+          <span class="tag">IAM</span><span class="tag">Sessions</span><span class="tag">MVC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="expand-card fade-in" style="transition-delay:.2s" onclick="toggleCard(this)">
+    <div class="expand-header">
+      <div class="expand-header-left">
+        <div class="expand-type"><div class="expand-dot"></div>PROJET ACADÉMIQUE · ESILV · 2024–2025</div>
+        <div class="expand-title">Mood Room — Pièce IoT Émotionnelle Connectée</div>
+        <div class="expand-subtitle">Arduino UNO R4 WiFi · BME680 · Python · MQTT · Node-RED · Grafana · InfluxDB</div>
+      </div>
+      <div class="expand-arrow">↓</div>
+    </div>
+    <div class="expand-body">
+      <div class="expand-body-inner">
+        <div class="expand-desc">Système embarqué inspiré du film Vice-Versa : une pièce qui "ressent" son environnement et exprime son état émotionnel via des signaux lumineux et sonores. Le capteur BME680 mesure en temps réel la température, l'humidité et la qualité de l'air, puis le système associe ces données à une émotion (joie, colère, tristesse, peur) traduite en couleur LED RGB et signal buzzer.</div>
+        <div class="expand-grid">
+          <div>
+            <div class="expand-grid-label">TECHNOLOGIES UTILISÉES</div>
+            <div class="expand-grid-value">Arduino UNO R4 WiFi · Capteur BME680 (I2C) · LED RGB · Buzzer · Python · Broker MQTT (Mosquitto) · Node-RED · Grafana · InfluxDB · Wi-Fi</div>
+          </div>
+          <div>
+            <div class="expand-grid-label">MON RÔLE</div>
+            <div class="expand-grid-value">Responsable Arduino et Dashboard — logique embarquée, programmation des réactions locales, configuration du broker, dashboard temps réel sous Node-RED et Grafana</div>
+          </div>
+        </div>
+        <div class="expand-security"><span>Sécurité :</span> Transmission des données via MQTT over TLS (chiffrement bout en bout) · Authentification broker par certificats avec username et password · Sécurisation complète des flux de données embarquées</div>
+        <div class="tags">
+          <span class="tag">Arduino</span><span class="tag">BME680</span><span class="tag">MQTT over TLS</span>
+          <span class="tag">Python</span><span class="tag">Node-RED</span><span class="tag">Grafana</span>
+          <span class="tag">InfluxDB</span><span class="tag">IoT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="expand-card fade-in" style="transition-delay:.3s" onclick="toggleCard(this)">
+    <div class="expand-header">
+      <div class="expand-header-left">
+        <div class="expand-type"><div class="expand-dot"></div>PROJET ACADÉMIQUE · ESILV · 2024</div>
+        <div class="expand-title">Application de Gestion d'Événements</div>
+        <div class="expand-subtitle">React · Node.js · Express · MySQL · JWT · RBAC</div>
+      </div>
+      <div class="expand-arrow">↓</div>
+    </div>
+    <div class="expand-body">
+      <div class="expand-body-inner">
+        <div class="expand-desc">Application full-stack permettant la création, l'administration et l'inscription à des événements. Deux types d'utilisateurs coexistent : les administrateurs qui créent et gèrent les événements, et les participants qui s'inscrivent. L'ensemble de l'architecture de sécurité a été pensé dès la conception.</div>
+        <div class="expand-grid">
+          <div>
+            <div class="expand-grid-label">TECHNOLOGIES UTILISÉES</div>
+            <div class="expand-grid-value">React · Node.js · Express · MySQL · JWT (JSON Web Tokens) · API REST · HTML/CSS · JavaScript · Git</div>
+          </div>
+          <div>
+            <div class="expand-grid-label">FONCTIONNALITÉS CLÉS</div>
+            <div class="expand-grid-value">Création et gestion d'événements · Système d'inscription · Dashboard administrateur · Gestion des accès par rôle · Interface responsive</div>
+          </div>
+        </div>
+        <div class="expand-security"><span>Sécurité :</span> Authentification JWT (tokens signés et vérifiés côté serveur) · Contrôle d'accès RBAC (admin et user) · Protection des endpoints API REST · Validation et assainissement des données entrantes côté serveur · Gestion des sessions</div>
+        <div class="tags">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Express</span>
+          <span class="tag">MySQL</span><span class="tag">JWT</span><span class="tag">RBAC</span>
+          <span class="tag">REST API</span><span class="tag">JavaScript</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CERTIF ═══ -->
+<section id="certif">
+  <div class="section-num fade-in">04 / PARCOURS & CERTIFICATIONS</div>
+  <div class="section-title fade-in">PARCOURS <span class="outline">COMPLET</span></div>
+
+  <div style="margin-bottom:44px">
+    <div class="section-num fade-in" style="font-size:10px;margin-bottom:14px">FORMATION</div>
+
+    <div class="expand-card fade-in" onclick="toggleCard(this)">
+      <div class="expand-header">
+        <div class="expand-header-left">
+          <div class="expand-type"><div class="expand-dot"></div>2024 – 2027 · EN COURS</div>
+          <div class="expand-title">Bachelor Ingénierie Numérique et Cybersécurité</div>
+          <div class="expand-subtitle">ESILV — École Supérieure d'Ingénieurs Léonard de Vinci · Paris-La Défense</div>
+        </div>
+        <div class="expand-arrow">↓</div>
+      </div>
+      <div class="expand-body">
+        <div class="expand-body-inner">
+          <div class="expand-desc">Formation polyvalente d'ingénieur mêlant informatique, cybersécurité et sciences de l'ingénieur. L'approche est fortement orientée projet depuis la première année, avec des problématiques techniques concrètes. Au-delà de l'informatique, la formation couvre les mathématiques, les statistiques, la mécanique et l'électronique, offrant une compréhension globale des systèmes.</div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">COURS SPÉCIALISÉS</div>
+              <div class="expand-grid-value">Sécurité réseau et pare-feu · Ethical hacking et pentest · Gouvernance et conformité ISO 27001 et RGPD · Bases de données SQL et NoSQL · Développement web (Vue.js, React) · Programmation Python, C, C++ et JavaScript</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">DURÉE ET FORMAT</div>
+              <div class="expand-grid-value">3 ans (2024 – 2027) · Passage en alternance à partir de septembre 2026 · Rythme 2 jours en entreprise et 3 jours à l'école</div>
+            </div>
+          </div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">ACTIVITÉS ASSOCIATIVES</div>
+              <div class="expand-grid-value">Membre de l'association Leobasket — équipe de basketball de l'ESILV</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">SÉJOUR INTERNATIONAL</div>
+              <div class="expand-grid-value">Semestre universitaire à l'EPHEC (Bruxelles, Belgique) — janvier à juin 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-card fade-in" style="margin-top:12px" onclick="toggleCard(this)">
+      <div class="expand-header">
+        <div class="expand-header-left">
+          <div class="expand-type"><div class="expand-dot"></div>JANV. 2026 – JUIN 2026 · MOBILITÉ INTERNATIONALE</div>
+          <div class="expand-title">Séjour universitaire international</div>
+          <div class="expand-subtitle">EPHEC · Bruxelles, Belgique</div>
+        </div>
+        <div class="expand-arrow">↓</div>
+      </div>
+      <div class="expand-body">
+        <div class="expand-body-inner">
+          <div class="expand-desc">Semestre intensif à Bruxelles dans le cadre du Bachelor ESILV, aussi dense techniquement qu'enrichissant humainement. Cette mobilité européenne m'a permis de travailler dans un environnement académique international, de découvrir la culture belge et de mener des projets d'infrastructure parmi les plus complexes de mon parcours, en conditions réelles sur VPS.</div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">ADMINISTRATION SYSTÈMES</div>
+              <div class="expand-grid-value">VPS OVH sous Linux Debian · Docker Compose (5 services isolés) · BIND9 et DNSSEC · Serveur mail SPF/DKIM/DMARC · Nginx · MariaDB · UFW · SSH · fail2ban</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">DÉVELOPPEMENT LOGICIEL</div>
+              <div class="expand-grid-value">TypeScript et Express · Tests Jest à couverture complète · Architecture MVC · Documentation Swagger · Git avancé (rebase interactif, squash, cherry-pick, résolution de conflits)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:44px">
+    <div class="section-num fade-in" style="font-size:10px;margin-bottom:14px">EXPÉRIENCES PROFESSIONNELLES</div>
+
+    <div class="expand-card fade-in" onclick="toggleCard(this)">
+      <div class="expand-header">
+        <div class="expand-header-left">
+          <div class="expand-type"><div class="expand-dot"></div>JUIL. 2026 – SEPT. 2026 · EN COURS</div>
+          <div class="expand-title">Stagiaire Data Engineer & Développement</div>
+          <div class="expand-subtitle">Mistertemp — Leader de l'intérim digital · Clichy</div>
+        </div>
+        <div class="expand-arrow">↓</div>
+      </div>
+      <div class="expand-body">
+        <div class="expand-body-inner">
+          <div class="expand-desc">Stage de 3 mois au sein de l'équipe tech de Mistertemp, entreprise spécialisée dans le travail temporaire digital. Contribution au développement de microservices Python sur une architecture cloud serverless AWS, avec une mission principale sur la conception de MCP Servers (Model Context Protocol) permettant à des agents IA d'interroger les données métier en langage naturel.</div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">MISSIONS PRINCIPALES</div>
+              <div class="expand-grid-value">Développement de 3 microservices Python sur AWS Lambda, S3, DynamoDB et API Gateway · Conception de MCP Servers pour agents IA · Pipelines de données · Rédaction de tests unitaires et d'intégration · Revues de code · Cérémonies Agile (sprint planning, daily, retrospective)</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">ACCOMPLISSEMENTS</div>
+              <div class="expand-grid-value">Mise en place du contrôle des permissions d'accès aux données interrogées par les agents IA · Validation des requêtes en langage naturel · Isolation des environnements · Infrastructure as code avec Terraform et Serverless Framework</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">AWS Lambda</span><span class="tag">S3</span>
+            <span class="tag">DynamoDB</span><span class="tag">MCP Servers</span><span class="tag">Agents IA</span>
+            <span class="tag">Terraform</span><span class="tag">CI/CD</span><span class="tag">Agile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-card fade-in" style="margin-top:12px" onclick="toggleCard(this)">
+      <div class="expand-header">
+        <div class="expand-header-left">
+          <div class="expand-type"><div class="expand-dot"></div>JUIL. 2025 – AOÛT 2025 · 2 MOIS</div>
+          <div class="expand-title">Stagiaire Développement Front-End</div>
+          <div class="expand-subtitle">Assurup · Levallois-Perret</div>
+        </div>
+        <div class="expand-arrow">↓</div>
+      </div>
+      <div class="expand-body">
+        <div class="expand-body-inner">
+          <div class="expand-desc">Stage de 2 mois au sein de l'équipe produit d'Assurup, une insurtech en croissance. Participation à la création de pages web à partir de maquettes fournies par la designeuse de l'équipe, avec un focus sur la qualité du code, les interactions dynamiques et la sécurisation des intégrations API.</div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">MISSIONS PRINCIPALES</div>
+              <div class="expand-grid-value">Développement de plus de 5 composants Vue.js et Nuxt réutilisables intégrés en production sur 4 pages · Intégration responsive HTML5 et CSS3 à partir de maquettes · Consommation d'API REST pour des interfaces dynamiques · Workflow Git et GitHub (branches, pull requests, revues de code)</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">ACCOMPLISSEMENTS</div>
+              <div class="expand-grid-value">Livrables déployés en production dans les délais avec revues de code validées par l'équipe · Sécurisation des endpoints API (validation des données entrantes, gestion structurée des erreurs, protection contre les injections, gestion des CORS et routes protégées) · Participation aux réunions d'équipe et aux échanges techniques</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">Vue.js</span><span class="tag">Nuxt</span><span class="tag">HTML5</span>
+            <span class="tag">CSS3</span><span class="tag">JavaScript</span><span class="tag">API REST</span>
+            <span class="tag">Git</span><span class="tag">CORS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-card fade-in" style="margin-top:12px" onclick="toggleCard(this)">
+      <div class="expand-header">
+        <div class="expand-header-left">
+          <div class="expand-type"><div class="expand-dot"></div>AVR. 2024 – MAI 2024 · 1 MOIS</div>
+          <div class="expand-title">Stagiaire Découverte en Informatique</div>
+          <div class="expand-subtitle">Académie de Paris — Rectorat · Paris</div>
+        </div>
+        <div class="expand-arrow">↓</div>
+      </div>
+      <div class="expand-body">
+        <div class="expand-body-inner">
+          <div class="expand-desc">Stage d'un mois au sein du service informatique du Rectorat de Paris, dans un environnement institutionnel à très fort volume d'utilisateurs. Première expérience professionnelle concrète, déterminante dans la construction de mon projet professionnel vers l'ingénierie numérique.</div>
+          <div class="expand-grid">
+            <div>
+              <div class="expand-grid-label">MISSIONS PRINCIPALES</div>
+              <div class="expand-grid-value">Formatage, réinstallation et configuration de postes informatiques · Maintenance matérielle et logicielle · Assistance aux utilisateurs pour la résolution d'incidents (pannes, problèmes réseau, logiciels) · Coordination et suivi de projets transverses</div>
+            </div>
+            <div>
+              <div class="expand-grid-label">ACCOMPLISSEMENTS</div>
+              <div class="expand-grid-value">Plus de 50 postes formatés, déployés et sécurisés (configuration des droits utilisateurs, durcissement des paramètres système) · Approche méthodique développée face aux incidents · Renforcement de la rigueur organisationnelle en environnement institutionnel</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">Support technique</span><span class="tag">Administration système</span>
+            <span class="tag">Windows</span><span class="tag">Diagnostic</span><span class="tag">Sécurisation postes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:44px">
+    <div class="section-num fade-in" style="font-size:10px;margin-bottom:14px">LABS & AUTO-FORMATION</div>
+    <div class="certif-grid">
+      <div class="certif-card fade-in">
+        <div class="certif-icon">⚔️</div>
+        <div>
+          <div class="certif-name">TryHackMe</div>
+          <div class="certif-issuer">Parcours SOC Level 1 en cours · Pentest web · Privilege escalation · Analyse de logs</div>
+        </div>
+      </div>
+      <div class="certif-card fade-in" style="transition-delay:.1s">
+        <div class="certif-icon">🖥️</div>
+        <div>
+          <div class="certif-name">HackTheBox</div>
+          <div class="certif-issuer">Labs offensifs · Exploitation web · Pentest applicatif</div>
+        </div>
+      </div>
+      <div class="certif-card fade-in" style="transition-delay:.2s">
+        <div class="certif-icon">🛡️</div>
+        <div>
+          <div class="certif-name">SecNumacadémie — ANSSI</div>
+          <div class="certif-issuer">Gouvernance · Conformité · Bonnes pratiques SSI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-num fade-in" style="font-size:10px;margin-bottom:14px">CENTRES D'INTÉRÊT</div>
+    <div class="hobbies-grid">
+      <div class="hobby-card fade-in">
+        <div class="hobby-icon">🏀</div>
+        <div class="hobby-name">Basketball</div>
+        <div class="hobby-desc">Membre de l'association Leobasket à l'ESILV — pratique régulière en équipe, esprit collectif et discipline</div>
+      </div>
+      <div class="hobby-card fade-in" style="transition-delay:.1s">
+        <div class="hobby-icon">🔐</div>
+        <div class="hobby-name">Veille Cybersécurité</div>
+        <div class="hobby-desc">Suivi quotidien des sources ANSSI, CISA, CVE et des actualités du secteur cyber</div>
+      </div>
+      <div class="hobby-card fade-in" style="transition-delay:.2s">
+        <div class="hobby-icon">⚔️</div>
+        <div class="hobby-name">CTF & Labs Offensifs</div>
+        <div class="hobby-desc">Pratique régulière sur TryHackMe et HackTheBox — pentest web, privilege escalation et analyse de logs</div>
+      </div>
+      <div class="hobby-card fade-in" style="transition-delay:.3s">
+        <div class="hobby-icon">🤖</div>
+        <div class="hobby-name">Intelligence Artificielle</div>
+        <div class="hobby-desc">Exploration des LLMs, agents IA et MCP Servers avec un regard sur les enjeux de sécurité associés</div>
+      </div>
+      <div class="hobby-card fade-in" style="transition-delay:.4s">
+        <div class="hobby-icon">🌍</div>
+        <div class="hobby-name">Mobilité Internationale</div>
+        <div class="hobby-desc">Séjour universitaire à Bruxelles — curiosité pour les cultures tech européennes et les environnements internationaux</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="section-num fade-in">05 / CONTACT</div>
+  <div class="section-title fade-in">RECRUTONS <span class="outline">ENSEMBLE</span></div>
+  <div class="contact-wrapper">
+    <div class="fade-in">
+      <div style="font-size:clamp(30px,6vw,52px);font-weight:900;line-height:1.1;margin-bottom:18px">OPEN<br>TO<br><span style="color:var(--rose)">WORK</span></div>
+      <p style="font-size:clamp(14px,1.5vw,16px);color:var(--text-dim);line-height:1.9;margin-bottom:30px">En recherche active d'une alternance en cybersécurité et ingénierie numérique.<br>Rythme : 2 jours en entreprise et 3 jours à l'école.<br>Disponible dès le 28 septembre 2026 — France.</p>
+      <a href="CV_Maelys_Fiaty.pdf" download class="btn-primary">↓ TÉLÉCHARGER MON CV</a>
+    </div>
+    <div class="contact-links-grid fade-in" style="transition-delay:.2s">
+      <a href="mailto:maelys.fiaty@edu.devinci.fr" class="contact-link">
+        <span class="contact-link-icon">✉</span>
+        <div><span class="contact-link-label">MAIL</span><span class="contact-link-val">maelys.fiaty@edu.devinci.fr</span></div>
+      </a>
+      <a href="https://linkedin.com/in/maelys-fiaty" target="_blank" class="contact-link">
+        <span class="contact-link-icon">💼</span>
+        <div><span class="contact-link-label">LINKEDIN</span><span class="contact-link-val">linkedin.com/in/maelys-fiaty</span></div>
+      </a>
+      <a href="https://github.com/Mfiaty" target="_blank" class="contact-link">
+        <span class="contact-link-icon">🐙</span>
+        <div><span class="contact-link-label">GITHUB</span><span class="contact-link-val">github.com/Mfiaty</span></div>
+      </a>
+      <div class="contact-link" style="cursor:default">
+        <span class="contact-link-icon">📍</span>
+        <div><span class="contact-link-label">LOCALISATION</span><span class="contact-link-val">France</span></div>
+      </div>
+      <div class="contact-link" style="cursor:default">
+        <span class="contact-link-icon">📅</span>
+        <div><span class="contact-link-label">DISPONIBILITÉ</span><span class="contact-link-val">Dès le 28 septembre 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const cursor=document.getElementById('cursor'),glow=document.getElementById('cursorGlow');
+let mx=0,my=0,gx=0,gy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function a(){gx+=(mx-gx)*.08;gy+=(my-gy)*.08;glow.style.left=gx+'px';glow.style.top=gy+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('a,button,.tag,.skill-card,.hobby-card,.certif-card,.lang-card,.expand-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';cursor.style.background='transparent';cursor.style.border='2px solid var(--rose)';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';cursor.style.background='var(--rose)';cursor.style.border='none';});
+});
+
+const bootLines=['[  OK  ] Loading identity module ........... done','[  OK  ] Mounting security stack ........... done','[  OK  ] Initializing cyber skills ......... done','[  OK  ] Importing project database ........ done','[  OK  ] Establishing secure connection .... done','[  OK  ] Starting portfolio interface ...... done'];
+const bc=document.getElementById('bootLines'),bf=document.getElementById('bootFill'),bl=document.getElementById('bootLabel');
+async function runBoot(){
+  for(let i=0;i<bootLines.length;i++){
+    await new Promise(r=>setTimeout(r,280));
+    const d=document.createElement('div');d.className='boot-line';
+    d.innerHTML=`<span class="ok">${bootLines[i].substring(0,8)}</span>${bootLines[i].substring(8)}`;
+    bc.appendChild(d);requestAnimationFrame(()=>d.classList.add('visible'));
+    const p=Math.round(((i+1)/bootLines.length)*100);bf.style.width=p+'%';bl.textContent='Loading: '+p+'%';
+  }
+  await new Promise(r=>setTimeout(r,400));
+  const boot=document.getElementById('boot');boot.style.transition='opacity .6s';boot.style.opacity='0';
+  setTimeout(()=>{boot.style.display='none';document.querySelectorAll('#profil .fade-in').forEach((el,i)=>setTimeout(()=>el.classList.add('visible'),i*100));},600);
+}
+runBoot();
+
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.08});
+document.querySelectorAll('.fade-in:not(#profil .fade-in)').forEach(el=>obs.observe(el));
+
+function toggleCard(card){
+  const isOpen=card.classList.contains('open');
+  document.querySelectorAll('.expand-card.open').forEach(c=>{if(c!==card)c.classList.remove('open');});
+  card.classList.toggle('open',!isOpen);
+  if(!isOpen)setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+</script>
+</body>
+</html>
